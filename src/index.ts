@@ -13,7 +13,7 @@ const {
 } = require("discord.js");
 const fs = require("fs");
 const axios = require("axios");
-
+//hello
 // Create a new client instance
 const client = new Client({
 	intents: ["GUILDS", "GUILD_MESSAGES"],
