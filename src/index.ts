@@ -36,6 +36,9 @@ const greetings: string[] = [
 	"هلا",
 	"هيلو",
 	"السلام عليكم",
+	"مرحبا",
+	"مرحبا بكم",
+	"هاي",
 ];
 client.on("messageCreate", async (message: any) => {
 	if (message.content === "js" || message.content === "javascript") {
