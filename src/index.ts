@@ -41,6 +41,20 @@ const greetings: string[] = [
 	"هاي",
 ];
 client.on("messageCreate", async (message: any) => {
+	if (message) {
+		if (message.author.username === "rihanfoudeh") {
+			if (message.content === "لحالك") {	
+					message.reply(" هل تقصد يوسف ؟ 🤔");
+				if (message.content === "yes" || message.content === "نعم") {
+			         message.reply(`<@861183623825457152> شوف شو بيحكي عليك `);
+				}
+				if (message.content === "no" || message.content === "لا") 	message.reply(` حريمه`);	
+				
+			}
+		}
+		}
+
+	
 	if (message.content === "js" || message.content === "javascript") {
 		message.channel.send({
 			files: [
@@ -64,14 +78,17 @@ client.on("messageCreate", async (message: any) => {
 			);
 		}
 	}
-	if (message.author.username === "Marwan-Zakia") {
-		if (message.content === "لحالك") {
-			message.reply(" هل تقصد يوسف ؟ 🤔");
-			if (message.content === "yes" || message.content === "نعم")
-				MessageMentions.users.tags === " #0096";
-		}
-	}
-	// get a random number between 1 and 10
+
+	// if (message.content === "help") {
+	// 	message.channel.send({
+	// 		files: [
+	// 			{
+	// 				attachment: "assets/help.png",
+	// 				name: "help.png",
+	// 			},
+	// 		],
+	// 	});
+	// }
 
 	if (message.content.startsWith(prefix)) {
 		let newMessge: string = message.content.slice(1);
@@ -116,9 +133,7 @@ client.on("messageCreate", async (message: any) => {
 					newdata.length === 0 ||
 					newdata === null
 				) {
-					message.reply(
-						"could not get data becuse no 🥲",
-					);
+					message.reply("could not get data becuse no 🥲");
 					console.log("err");
 				}
 			})
