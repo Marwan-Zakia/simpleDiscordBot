@@ -13,17 +13,13 @@ const {
 } = require("discord.js");
 const fs = require("fs");
 const axios = require("axios");
-//hello
-// Create a new client instance
+require('./getterCommand')
 const client = new Client({
 	intents: ["GUILDS", "GUILD_MESSAGES"],
 	partials: ["MESSAGE", "REACTION"],
 });
-
-// When the client is ready, run this code (only once)
-// client.once('ready', () => {
-// 	console.log('Ready!');
-// });
+const TorrentSearchApi = require("torrent-search-api");
+TorrentSearchApi.enableProvider("1337x");
 const prefix: string = "!";
 const greetings: string[] = [
 	"hello",
@@ -43,18 +39,17 @@ const greetings: string[] = [
 client.on("messageCreate", async (message: any) => {
 	if (message) {
 		if (message.author.username === "rihanfoudeh") {
-			if (message.content === "لحالك") {	
-					message.reply(" هل تقصد يوسف ؟ 🤔");
+			if (message.content === "لحالك") {
+				message.reply(" هل تقصد يوسف ؟ 🤔");
 				if (message.content === "yes" || message.content === "نعم") {
-			         message.reply(`<@861183623825457152> شوف شو بيحكي عليك `);
+					// *** fix this ***\\
+					message.reply(`<@861183623825457152> شوف شو بيحكي عليك `);
 				}
-				if (message.content === "no" || message.content === "لا") 	message.reply(` حريمه`);	
-				
+				if (message.content === "no" || message.content === "لا")
+					message.reply(` حريمه`);
 			}
 		}
-		}
-
-	
+	}
 	if (message.content === "js" || message.content === "javascript") {
 		message.channel.send({
 			files: [
@@ -78,18 +73,6 @@ client.on("messageCreate", async (message: any) => {
 			);
 		}
 	}
-
-	// if (message.content === "help") {
-	// 	message.channel.send({
-	// 		files: [
-	// 			{
-	// 				attachment: "assets/help.png",
-	// 				name: "help.png",
-	// 			},
-	// 		],
-	// 	});
-	// }
-
 	if (message.content.startsWith(prefix)) {
 		let newMessge: string = message.content.slice(1);
 		let newdata: any;
@@ -101,12 +84,17 @@ client.on("messageCreate", async (message: any) => {
 			.then((res: any) => {
 				let er = false;
 				newdata = res.data.results;
-				const randomNumber = Math.floor(Math.random() * 10) + 1;
+				const randomNumber: number =
+					Math.floor(Math.random() * 5) + 1;
 				if (newdata && newdata.length !== 0) {
 					const embed = new MessageEmbed()
 						.setColor("#0099ff")
-						.setTitle((newdata[randomNumber]?.title).toString())
-						.setURL(newdata[randomNumber]?.link)
+						.setTitle(
+							(newdata[randomNumber]?.title).toString() ?? "no title",
+						)
+						.setURL(
+							newdata[randomNumber]?.link ?? "https://www.google.com",
+						)
 						.setDescription(
 							newdata[randomNumber]?.full_description
 								?.toString()
@@ -141,5 +129,6 @@ client.on("messageCreate", async (message: any) => {
 			.catch((err: any) => console.log(err));
 		console.log(url);
 	}
+	
 });
 client.login(process.env.DISCORDJS_BOT_TOKEN);

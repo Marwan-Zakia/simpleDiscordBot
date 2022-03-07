@@ -1,68 +1,118 @@
 /** @format */
 
-import axios from "axios";
-import Commando from "discord.js-commando";
-const { RichEmbed } = require("discord.js");
-export default class GetterCommand extends Commando.Command {
-	constructor(clinet: any) {
-		super(clinet, {
-			description: "get news from newsdata.io",
-			name: "news",
-			aliases: ["news"],
-			group: "general",
-			memberName: "news",
-		});
-	}
-	async run(message: any, args: any): Promise<any> {
-		let newMessge: string = args;
-		let newdata: any;
-		const url = `https://newsdata.io/api/1/news?apikey=${
-			process.env.Api
-		}&q=${newMessge ?? "games"}`;
-		axios
-			.get(url)
-			.then((res: any) => {
-				newdata = res.data.results;
-				return newdata;
-			})
-			.catch((err: any) => console.log(err));
-		console.log(newdata);
+const { pagination } = require("reconlx");
+const TorrentSearchApi = require("torrent-search-api");
+TorrentSearchApi.enableProvider("1337x");
+const { Client, message, MessageEmbed } = require("discord.js");
 
-		if (!newdata) {
-			message.reply(
-				"sorry couldn`t find what you were looking for 🥲",
+module.exports = {
+
+	name: "getter",
+	description: "getter",
+	async run(client: any, message: any, args: any) {
+	
+		const newPrefix: string = "*";
+		if (message.content.startsWith(newPrefix)) {
+				console.log("args");
+			let newMessge: string = message.content.slice(1);
+			const torrents: any = await TorrentSearchApi.search(
+				newMessge ?? "games",
 			);
-			console.log("err");
+			console.log(torrents);
+			const randomNumber: number = Math.floor(Math.random() * 5) + 1;
+			if (torrents && torrents.length !== 0) {
+				const embed = new MessageEmbed()
+					.setColor("#0099ff")
+					.setTitle(
+						(torrents[randomNumber]?.title).toString() ?? "no title",
+					)
+					.setURL(
+						torrents[randomNumber]?.desc ?? "https://www.google.com",
+					)
+					.setDescription(
+						torrents[randomNumber]?.title
+							?.toString()
+							?.slice(0, 500) ?? "no description",
+					)
+					.setThumbnail(
+						torrents[randomNumber]?.desc ??
+							"https://i.imgur.com/AfFp7pu.png",
+					)
+
+					.setImage(
+						torrents[randomNumber]?.desc ??
+							"https://i.imgur.com/AfFp7pu.png",
+					)
+					.setTimestamp()
+					.setFooter({
+						text: `powered 1337x this has a ${
+							torrents[randomNumber]?.size ?? ""
+						} `,
+						iconURL: "https://i.imgur.com/AfFp7pu.png",
+					});
+				console.log("hi")
+				 message.channel.send({ embeds: [embed] });
+			} else if (
+				!torrents ||
+				torrents.length === 0 ||
+				torrents === null
+			) {
+				message.reply("could not get data becuse no 🥲");
+				console.log("err");
+			}
 		}
-		let embed = new RichEmbed()
-			.setTitle("news")
-			.setColor("#0099ff")
-			.setDescription(`${newdata[0].title}`)
-			.setImage(`${newdata[0].image}`)
-			.setURL(`${newdata[0].url}`)
-			.setFooter(`${newdata[0].source}`);
-		message.channel.send(embed);
-	}
-}
+	},
+};
+/* 
 
-/** 
+	const newPrefix: string = "*";
+		if (message.content.startsWith(newPrefix)) {
+			let newMessge: string = message.content.slice(1);
+			const torrents: any = await TorrentSearchApi.search(
+				newMessge ?? "games",
+			);
+			console.log(torrents);
+			const randomNumber: number = Math.floor(Math.random() * 5) + 1;
+			if (torrents && torrents.length !== 0) {
+				const embed = new MessageEmbed()
+					.setColor("#0099ff")
+					.setTitle(
+						(torrents[randomNumber]?.title).toString() ?? "no title",
+					)
+					.setURL(
+						torrents[randomNumber]?.desc ?? "https://www.google.com",
+					)
+					.setDescription(
+						torrents[randomNumber]?.title
+							?.toString()
+							?.slice(0, 500) ?? "no description",
+					)
+					.setThumbnail(
+						torrents[randomNumber]?.desc ??
+							"https://i.imgur.com/AfFp7pu.png",
+					)
 
-async execute(message: any, args: string[]) {
-        let newMessge: string = message.content.slice(1);
-        let newdata: any;
-        const url = `https://newsdata.io/api/1/news?apikey=${process.env.Api}&q=${newMessge ?? "games"}`;
-        axios
+					.setImage(
+						torrents[randomNumber]?.desc ??
+							"https://i.imgur.com/AfFp7pu.png",
+					)
+					.setTimestamp()
+					.setFooter({
+						text: `powered 1337x this has a ${
+							torrents[randomNumber]?.size ?? ""
+						} `,
+						iconURL: "https://i.imgur.com/AfFp7pu.png",
+					});
 
-            .get(url)
-            .then((res: any) => {
-                newdata = res.data.results;
-                return newdata;
-            })
-            .catch((err: any) => console.log(err));
-        console.log(newdata);
-         
-        if (!newdata) {
-            message.reply("sorry couldn`t find what you were looking for 🥲";
-            console.log("err");
-  
-**/
+				message.channel.send({ embeds: [embed] });
+			} else if (
+				!torrents ||
+				torrents.length === 0 ||
+				torrents === null
+			) {
+				message.reply("could not get data becuse no 🥲");
+				console.log("err");
+			}
+		}
+
+*/

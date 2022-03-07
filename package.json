@@ -34,6 +34,8 @@
 		"discord.js-commando": "^0.12.3",
 		"dotenv": "^16.0.0",
 		"nodemon": "^2.0.15",
+		"reconlx": "^2.5.2",
+		"torrent-search-api": "^2.1.4",
 		"ts-node": "^10.4.0",
 		"typescript": "^4.5.4",
 		"wokcommands": "^1.5.3"
