@@ -1,12 +1,9 @@
-/** @format */
 
-import { Guild } from "discord.js";
 
 require("dotenv").config();
 const {
 	Client,
 	MessageEmbed,
-	MessageButton,
 	MessageActionRow,
 	MessageSelectMenu,
 } = require("discord.js");
@@ -68,6 +65,7 @@ client.on("messageCreate", async (message: any) => {
 if (message.content=== 'are you online') {
 	message.reply('yes i am online')
 }	
+
 if (farewell.includes(message.content.toLowerCase())) {
 	if (message.author.username === "Marwan-Zakia") {
 		message.reply(" حياك الله");
