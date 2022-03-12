@@ -193,9 +193,6 @@ if (farewell.includes(message.content.toLowerCase())) {
 		);
 
 		await message.reply({ components: [row] });
-	} else {
-		message.reply("could not get data becuse no 🥲");
-		console.log("err");
 	}
 });
 
