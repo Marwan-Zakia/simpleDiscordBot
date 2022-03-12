@@ -34,6 +34,18 @@ const greetings: string[] = [
 	"مرحبا بكم",
 	"هاي",
 ];
+const farewell: string[] = [
+	"bye",
+	"goodbye",
+	"see ya",
+	"cya",
+	"see you",
+	"see you later",
+	"goodbye",
+	"سلام ",
+	"باي",
+	"تصبحون بخير",
+];
 client.once("ready", () => {
 	console.log("Ready!");
 });
@@ -52,6 +64,23 @@ client.on("messageCreate", async (message: any) => {
 			}
 		}
 	}
+ 
+if (message.content=== 'are you online') {
+	message.reply('yes i am online')
+}	
+if (farewell.includes(message.content.toLowerCase())) {
+	if (message.author.username === "Marwan-Zakia") {
+		message.reply(" حياك الله");
+	} else if (message.author.username === "Ahmad jallad") {
+		message.reply(" حياك الله");
+	} else if (message.author.username === "rihanfoudeh") {
+		message.reply("حريمة");
+	} else {
+		message.reply(
+			`وعليكم السلام 😊${message.author.username} `,
+		);
+	}
+}
 
 	if (message.content === "js" || message.content === "javascript") {
 		message.channel.send({
