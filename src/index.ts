@@ -38,17 +38,8 @@ client.once("ready", () => {
 	console.log("Ready!");
 });
 client.on("messageCreate", async (message: any) => {
+	if (message.author.bot) return;
 	if (message) {
-		if (message.author.bot || !message.guild) return;
-		if (message.content === "help") {
-			let newButton = new MessageButton()
-				.setStyle("green")
-				.setID("help")
-				.setLabel("help");
-			message.channel.send("this is helpfull", {
-				buttons: [newButton],
-			});
-		}
 		if (message.author.username === "rihanfoudeh") {
 			if (message.content === "لحالك") {
 				message.reply(" هل تقصد يوسف ؟ 🤔");
@@ -61,6 +52,7 @@ client.on("messageCreate", async (message: any) => {
 			}
 		}
 	}
+
 	if (message.content === "js" || message.content === "javascript") {
 		message.channel.send({
 			files: [
@@ -138,12 +130,7 @@ client.on("messageCreate", async (message: any) => {
 			})
 
 			.catch((err: any) => console.log(err));
-		console.log(url);
-	} else {
-		message.reply("could not get data becuse no 🥲");
-		console.log("err");
-	}
-
+	} 
 	const newPrefix: string = "$";
 	if (message.content.startsWith(newPrefix)) {
 		let newMessge: string = message.content.slice(1);
@@ -177,6 +164,9 @@ client.on("messageCreate", async (message: any) => {
 		);
 
 		await message.reply({ components: [row] });
+	} else {
+		message.reply("could not get data becuse no 🥲");
+		console.log("err");
 	}
 });
 
@@ -186,50 +176,3 @@ client.on("interactionCreate", async (interaction: any) => {
 });
 
 client.login(process.env.DISCORDJS_BOT_TOKEN);
-/* 
-
-// 
-		const randomNumber: number = 1;
-		const row = new MessageActionRow().addComponents(
-			new MessageButton()
-				.setCustomId("primary")
-				.setLabel("▶")
-				.setStyle("PRIMARY")
-				.setAction(randomNumber + 1),
-		);
-
-		const embed = new MessageEmbed()
-			.setColor("#0099ff")
-			.setTitle(
-				torrents[randomNumber]?.title?.toString() ?? "no title",
-			)
-			.setURL(
-				torrents[randomNumber]?.desc ?? "https://www.google.com",
-			)
-			.setDescription(
-				torrents[randomNumber]?.title?.toString()?.slice(0, 500) ??
-					"no description",
-			)
-			.setThumbnail(
-				torrents[randomNumber]?.desc ??
-					"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/1337X_logo.svg/1200px-1337X_logo.svg.png",
-			)
-
-			.setImage(
-				torrents[randomNumber]?.desc ??
-					"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/1337X_logo.svg/1200px-1337X_logo.svg.png",
-			)
-			.setTimestamp()
-			.setFooter({
-				text: `powered 1337x this has a ${
-					torrents[randomNumber]?.size ?? ""
-				} `,
-				iconURL: "https://i.imgur.com/AfFp7pu.png",
-			});
-
-		await message.reply({
-			components: [row],
-			embeds: [embed],
-		});
-
-*/
