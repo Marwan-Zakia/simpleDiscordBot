@@ -1,23 +1,21 @@
 /** @format */
 
-import path from "path";
+import { Guild } from "discord.js";
 
 require("dotenv").config();
 const {
 	Client,
-	WebhookClient,
-	Intents,
-	MessageMentions,
 	MessageEmbed,
-	Discord,
+	MessageButton,
+	MessageActionRow,
+	MessageSelectMenu,
 } = require("discord.js");
-const fs = require("fs");
 const axios = require("axios");
-require('./getterCommand')
 const client = new Client({
 	intents: ["GUILDS", "GUILD_MESSAGES"],
 	partials: ["MESSAGE", "REACTION"],
 });
+
 const TorrentSearchApi = require("torrent-search-api");
 TorrentSearchApi.enableProvider("1337x");
 const prefix: string = "!";
@@ -36,8 +34,21 @@ const greetings: string[] = [
 	"مرحبا بكم",
 	"هاي",
 ];
+client.once("ready", () => {
+	console.log("Ready!");
+});
 client.on("messageCreate", async (message: any) => {
 	if (message) {
+		if (message.author.bot || !message.guild) return;
+		if (message.content === "help") {
+			let newButton = new MessageButton()
+				.setStyle("green")
+				.setID("help")
+				.setLabel("help");
+			message.channel.send("this is helpfull", {
+				buttons: [newButton],
+			});
+		}
 		if (message.author.username === "rihanfoudeh") {
 			if (message.content === "لحالك") {
 				message.reply(" هل تقصد يوسف ؟ 🤔");
@@ -128,7 +139,97 @@ client.on("messageCreate", async (message: any) => {
 
 			.catch((err: any) => console.log(err));
 		console.log(url);
+	} else {
+		message.reply("could not get data becuse no 🥲");
+		console.log("err");
 	}
-	
+
+	const newPrefix: string = "$";
+	if (message.content.startsWith(newPrefix)) {
+		let newMessge: string = message.content.slice(1);
+		const torrents: any = await TorrentSearchApi.search(
+			newMessge ?? "games",
+		);
+		let news: any = torrents.map((item: any) => {
+			return {
+				label: item?.title?.toString()?.slice(0, 100) ?? "no title",
+				description:
+					item?.desc?.slice(0, 100) ?? "https://www.google.com",
+				value: item?.desc?.slice(0, 100) ?? "https://www.google.com",
+				url: item?.desc?.slice(0, 100) ?? "https://www.google.com",
+			};
+		});
+		const row = new MessageActionRow().addComponents(
+			new MessageSelectMenu()
+				.setCustomId("select")
+				.setPlaceholder("Nothing selected")
+				.setMinValues(1)
+				.setMaxValues(1)
+				.addOptions(
+					[...news] ?? [
+						{
+							label: "Select me",
+							description: "This is a description",
+							value: "first_option",
+						},
+					],
+				),
+		);
+
+		await message.reply({ components: [row] });
+	}
 });
+
+client.on("interactionCreate", async (interaction: any) => {
+	const selected = interaction.values[0];
+	interaction.reply(`You selected ${selected}`);
+});
+
 client.login(process.env.DISCORDJS_BOT_TOKEN);
+/* 
+
+// 
+		const randomNumber: number = 1;
+		const row = new MessageActionRow().addComponents(
+			new MessageButton()
+				.setCustomId("primary")
+				.setLabel("▶")
+				.setStyle("PRIMARY")
+				.setAction(randomNumber + 1),
+		);
+
+		const embed = new MessageEmbed()
+			.setColor("#0099ff")
+			.setTitle(
+				torrents[randomNumber]?.title?.toString() ?? "no title",
+			)
+			.setURL(
+				torrents[randomNumber]?.desc ?? "https://www.google.com",
+			)
+			.setDescription(
+				torrents[randomNumber]?.title?.toString()?.slice(0, 500) ??
+					"no description",
+			)
+			.setThumbnail(
+				torrents[randomNumber]?.desc ??
+					"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/1337X_logo.svg/1200px-1337X_logo.svg.png",
+			)
+
+			.setImage(
+				torrents[randomNumber]?.desc ??
+					"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/1337X_logo.svg/1200px-1337X_logo.svg.png",
+			)
+			.setTimestamp()
+			.setFooter({
+				text: `powered 1337x this has a ${
+					torrents[randomNumber]?.size ?? ""
+				} `,
+				iconURL: "https://i.imgur.com/AfFp7pu.png",
+			});
+
+		await message.reply({
+			components: [row],
+			embeds: [embed],
+		});
+
+*/
