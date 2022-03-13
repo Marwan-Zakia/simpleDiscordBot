@@ -39,9 +39,17 @@ const farewell: string[] = [
 	"see you",
 	"see you later",
 	"goodbye",
-	"سلام ",
+	"سلام",
 	"باي",
 	"تصبحون بخير",
+];
+
+const commands: string[] = [
+	"commandes",
+	"what are the commands",
+	"?",
+	"شو بتساوي",
+	"شو بتعمل",
 ];
 client.once("ready", () => {
 	console.log("Ready!");
@@ -61,9 +69,29 @@ client.on("messageCreate", async (message: any) => {
 			}
 		}
 	}
-
+	if (commands.includes(message.content.toLowerCase())) {
+		message.reply(
+			`sending a message starting with ! will call a news api and send you the latest news of rest content of the message and  $ will call a torrent search api and send you the latest torrents of rest content of the message`,
+		);
+	}
 	if (message.content === "are you online") {
 		message.reply("yes i am online");
+	}
+	if (message.content === "yes" || message.content === "YES") {
+		const embed = new MessageEmbed()
+			.setTitle("YES.")
+			.setDescription("YES.")
+			.setColor("#00ff00")
+			.setFooter("YES.")
+			.setTimestamp()
+			.setThumbnail(
+				"https://cdn.discordapp.com/attachments/717087150109879072/717087150109879072/image0.png",
+			)
+			.setImage(
+				"https://i.kym-cdn.com/entries/icons/original/000/031/015/cover5.jpg",
+			)
+			.setAuthor("Author: the dumb**s javascript bot ");
+		message.channel.send({ embeds: [embed] });
 	}
 
 	if (farewell.includes(message.content.toLowerCase())) {
