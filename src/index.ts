@@ -1,4 +1,4 @@
-
+/** @format */
 
 require("dotenv").config();
 const {
@@ -61,24 +61,22 @@ client.on("messageCreate", async (message: any) => {
 			}
 		}
 	}
- 
-if (message.content=== 'are you online') {
-	message.reply('yes i am online')
-}	
 
-if (farewell.includes(message.content.toLowerCase())) {
-	if (message.author.username === "Marwan-Zakia") {
-		message.reply(" حياك الله");
-	} else if (message.author.username === "Ahmad jallad") {
-		message.reply(" حياك الله");
-	} else if (message.author.username === "rihanfoudeh") {
-		message.reply("حريمة");
-	} else {
-		message.reply(
-			`وعليكم السلام 😊${message.author.username} `,
-		);
+	if (message.content === "are you online") {
+		message.reply("yes i am online");
 	}
-}
+
+	if (farewell.includes(message.content.toLowerCase())) {
+		if (message.author.username === "Marwan-Zakia") {
+			message.reply(" حياك الله");
+		} else if (message.author.username === "Ahmad jallad") {
+			message.reply(" حياك الله");
+		} else if (message.author.username === "rihanfoudeh") {
+			message.reply("حريمة");
+		} else {
+			message.reply(`وعليكم السلام 😊${message.author.username} `);
+		}
+	}
 
 	if (message.content === "js" || message.content === "javascript") {
 		message.channel.send({
@@ -157,40 +155,45 @@ if (farewell.includes(message.content.toLowerCase())) {
 			})
 
 			.catch((err: any) => console.log(err));
-	} 
+	}
 	const newPrefix: string = "$";
 	if (message.content.startsWith(newPrefix)) {
 		let newMessge: string = message.content.slice(1);
 		const torrents: any = await TorrentSearchApi.search(
 			newMessge ?? "games",
 		);
-		let news: any = torrents.map((item: any) => {
-			return {
-				label: item?.title?.toString()?.slice(0, 100) ?? "no title",
-				description:
-					item?.desc?.slice(0, 100) ?? "https://www.google.com",
-				value: item?.desc?.slice(0, 100) ?? "https://www.google.com",
-				url: item?.desc?.slice(0, 100) ?? "https://www.google.com",
-			};
-		});
-		const row = new MessageActionRow().addComponents(
-			new MessageSelectMenu()
-				.setCustomId("select")
-				.setPlaceholder("Nothing selected")
-				.setMinValues(1)
-				.setMaxValues(1)
-				.addOptions(
-					[...news] ?? [
-						{
-							label: "Select me",
-							description: "This is a description",
-							value: "first_option",
-						},
-					],
-				),
-		);
+		if (torrents.length !== 0 || torrents !== null) {
+			let news: any = torrents.map((item: any) => {
+				return {
+					label: item?.title?.toString()?.slice(0, 100) ?? "no title",
+					description:
+						item?.desc?.slice(0, 100) ?? "https://www.google.com",
+					value:
+						item?.desc?.slice(0, 100) ?? "https://www.google.com",
+					url: item?.desc?.slice(0, 100) ?? "https://www.google.com",
+				};
+			});
+			const row = new MessageActionRow().addComponents(
+				new MessageSelectMenu()
+					.setCustomId("select")
+					.setPlaceholder("Nothing selected")
+					.setMinValues(1)
+					.setMaxValues(1)
+					.addOptions(
+						[...news] ?? [
+							{
+								label: "Select me",
+								description: "This is a description",
+								value: "first_option",
+							},
+						],
+					),
+			);
 
-		await message.reply({ components: [row] });
+			await message.reply({ components: [row] });
+		} else {
+			message.reply("no torrents found");
+		}
 	}
 });
 
